@@ -20,7 +20,7 @@ Package Server to enable client side use of packages by name and version. Use th
 <script src="http://pakr.yie.me/jquery"></script>
 ```
 
-#### Latest Bootstrap 3.3 patch: [bootstrap@3.3](http://pakr.yie.me/bootstrap@3.3)
+#### Bootstrap 3.3.x: [bootstrap@3.3](http://pakr.yie.me/bootstrap@3.3)
 
 ```html
 <script src="http://pakr.yie.me/bootstrap@3.3"></script>
@@ -32,13 +32,13 @@ Package Server to enable client side use of packages by name and version. Use th
 <script src="http://pakr.yie.me/angularjs@1.3.15"></script>
 ```
 
-#### Latest jQuery 2.1 patch and Bootstrap 3 minor version: [jquery@2.1,bootstrap@3](http://pakr.yie.me/jquery@2.1,bootstrap@3)
+#### jQuery 2.1.x and Bootstrap 3.x: [jquery@2.1,bootstrap@3](http://pakr.yie.me/jquery@2.1,bootstrap@3)
 
 ```html
 <script src="http://pakr.yie.me/jquery@2.1,bootstrap@3"></script>
 ```
 
-#### Bootstrap CSS (as JS is the package default): [bootstrap@2/css](http://pakr.yie.me/bootstrap@2/css)
+#### Bootstrap CSS (as package default is JS): [bootstrap@2/css](http://pakr.yie.me/bootstrap@2/css)
 
 ```html
 <link href="http://pakr.yie.me/bootstrap@2/css" rel="stylesheet" type="text/css">
