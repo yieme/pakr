@@ -4,15 +4,25 @@ Package Server to enable client side use of packages by name and version. Use th
 
 ## CDN Statistics
 
-CDN | Packages | Package Versions | Sources
---- | ---: | ---:
-[bootstrap](http://www.bootstrapcdn.com/) | 6 | 86 | *1
-[jsdelivr](http://www.jsdelivr.com/) | 1,456 | 3,957 | *2
-[google](https://developers.google.com/speed/libraries/) | 14 | 301 | *3
-[cdnjs](https://cdnjs.com/.com) | 1,218 | 13,145 | *4
-[pakr](./) | 2,346 | 18,259 | internal
+| CDN | Packages | Package Versions | Source |
+| --- | ---: | ---: | --- |
+| [pakr](./) | 2,346 | 18,259 | internal |
+| [jsdelivr](http://www.jsdelivr.com/) | 1,456 | 3,957 | *2 |
+| [cdnjs](https://cdnjs.com/.com) | 1,218 | 13,145 | *4 |
+| [google](https://developers.google.com/speed/libraries/) | 14 | 301 | *3 |
+| [bootstrap](http://www.bootstrapcdn.com/) | 6 | 86 | *1 |
 
-## [api](/api)
+## example_latest_jquery
+
+- Latest jQuery library: [jquery](http://pakr.yie.me/jquery)
+- Latest Bootstrap 3.3 patch: [bootstrap@3.3](http://pakr.yie.me/bootstrap@3.3)
+- Specific AngularJS version: [angularjs@1.3.15](http://pakr.yie.me/angularjs@1.3.15)
+- jQuery and Bootstrap together: [jquery@2.1,bootstrap@3](http://pakr.yie.me/jquery@2.1,bootstrap@3)
+- Bootstrap CSS (as JS is the default): [bootstrap@2/css](http://pakr.yie.me/bootstrap@2/css)
+- Bootswatch shorthand: [bootswatch@3/flatly](http://pakr.yie.me/bootswatch@3/flatly)
+```
+
+## [api](http://pakr.yie.me/api)
 
 ```js
 {
@@ -23,14 +33,7 @@ CDN | Packages | Package Versions | Sources
 	'latest_package':               '/{package}',
 	'versioned_package':            '/{package}@{version}',
 	'bundled_packages':             '/{package}[@{version}],{package}[@version]...',
-	'bootswatch_packages':          '/bootswatch[@version]/{variant}',
-
-	'example_latest_jquery':        '/jquery',
-	'example_bootstrap_3.3.x':      '/bootstrap@3.3',
-	'example_angular_1.3.15':       '/angularjs@1.3.15',
-	'example_jquery_and_bootstrap': '/jquery@2.1,bootstrap@3',
-	'example_bootstrap_2.x_css':    '/bootstrap@2/css',
-	'example_bootswatch':           '/bootswatch@3/flatly',
+	'bootswatch_packages':          '/bootswatch[@version]/{variant}'
 }
 ```
 
