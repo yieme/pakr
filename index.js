@@ -10,7 +10,7 @@ var apiDoc        = require('./modules/api-doc')
 var apiLatest     = require('./modules/api-latest')
 var apiPackage    = require('./modules/api-package')
 var favicon       = require('serve-favicon')(__dirname + '/favicon.ico')
-var pakrStatic    = process.env.STATIC_URL || 'http://pakr-static.herokuapp.com'
+var pakrStatic    = process.env.STATIC_URL || 'http://pakr-static.yie.me'
 var domain        = {
   pakr:       pakrStatic + '/$package/$version/$file', // proxy-cache-multi-domain override to include local files
   cdnjs:      'https://cdnjs.cloudflare.com/ajax/libs/$package/$version/$file',
@@ -20,8 +20,8 @@ var domain        = {
   bootswatch: 'https://maxcdn.bootstrapcdn.com/bootswatch/$version/$package/$file',
 }
 var packageList = [
-  'packages/strapdownjs/pakr.json',
   'cdnall_data.json',
+  pakrStatic + '/pakr.json',
 ]
 
 
@@ -30,7 +30,7 @@ Dias(function(dias) {
   var logger        = new Logger(logVariables, false)
   var config        = {
     dir:        './tmp',
-    logRequest: true,
+    logRequest: true, // log request transformations in proxy-cache-* layers // TODO: change to debug
     domain:     domain,
     skipInit:   true, // skip initial initialization in proxyPackage() below, as init will be done manually. avoids double loading
     packageDataUrl: packageList
