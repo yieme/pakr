@@ -40,7 +40,7 @@
   "dependencies": {
     "ceo-logger": "^1.1.1",
     "dias": "^0.5.4",
-    "middle-server": "^0.1.3",
+    "middle-server": "^0.1.4",
     "proxy-cache-packages": "^0.1.4",
     "semver-compare": "^1.0.0"
   },
