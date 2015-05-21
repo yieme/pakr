@@ -43,6 +43,11 @@ Dias(function(dias) {
   function packageMiddle(req, res, next) {
     proxyPackage(req, function proxyResults(err, data) {
       if (err) return next(err)
+      if (data.redirect) {
+        logger.info(req.url + ', redirect: ' + data.redirect)
+        res.redirect(307, data.redirect)
+        return
+      }
       var headers = data.headers
       var body    = data.body
       if (headers.type) res.type(headers.type)
@@ -53,7 +58,7 @@ Dias(function(dias) {
       res.send(body)
 
       if (config.logRequest) {
-        logger.info('type: ' + headers.type + ', length: ' + data.body.length)
+        logger.info(req.url + ', type: ' + headers.type + ', length: ' + data.body.length)
       }
     })
   }
