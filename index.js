@@ -47,6 +47,7 @@ Dias(function(dias) {
 
   process.on('uncaughtException', function (err) {
     logger.error(err)
+    logger.error(err.stack)
   })
 
   middleServer({
