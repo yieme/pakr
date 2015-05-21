@@ -12,7 +12,7 @@ Package Server to enable client side use of packages by name and version. Use th
 | [google](https://developers.google.com/speed/libraries/) | 14 | 301 | *3 |
 | [bootstrap](http://www.bootstrapcdn.com/) | 6 | 86 | *4 |
 
-## example_latest_jquery
+## Examples
 
 - Latest jQuery library: [jquery](http://pakr.yie.me/jquery)
 - Latest Bootstrap 3.3 patch: [bootstrap@3.3](http://pakr.yie.me/bootstrap@3.3)
