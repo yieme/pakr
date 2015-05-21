@@ -26,7 +26,7 @@ function apiPackage(req, res, next) {
 			versions.push(i)
     }
   }
-	var result = { name: name, latest: pack.latest, versions: versions.sort(cmp) }
+	var result = { name: name, latest: pack.latest, description: pack.description, homepage: pack.homepage, versions: versions.sort(cmp) }
   res.set('Content-Type', 'application/json') // JSONP: application/javascript
 	var json = (options.pretty) ? JSON.stringify(result, null, 2) : JSON.stringify(result)
   res.status(200).send(json)

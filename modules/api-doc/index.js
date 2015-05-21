@@ -10,7 +10,6 @@ function apiDoc(req, res, next) {
     api_docs:                       '/api',
     package_details:                '/api/{package}',
     latest_package_versions:        '/api/latest/{search}',
-    package_versions:               '/api/versions/{search}',
 //    cdn_stats:                      '/api/stats/comparison',
     latest_package:                 '/{package}',
     versioned_package:              '/{package}@{version}',
