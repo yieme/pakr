@@ -11,6 +11,7 @@ var apiLatest     = require('./modules/api-latest')
 var apiPackage    = require('./modules/api-package')
 var favicon       = require('serve-favicon')(__dirname + '/favicon.ico')
 var pakrStatic    = process.env.STATIC_URL || 'http://pakr-static.yie.me'
+var cacheDur      = (process.env.NODE_ENV == 'production') ? 60 * 60 * 1000 : 15 * 1000 // 1 hour in production, 15 seconds dev
 var domain        = {
   pakr:       pakrStatic + '/$package/$version/$file', // proxy-cache-multi-domain override to include local files
   cdnjs:      'https://cdnjs.cloudflare.com/ajax/libs/$package/$version/$file',
@@ -45,12 +46,14 @@ Dias(function(dias) {
       if (err) return next(err)
       if (data.redirect) {
         logger.info(req.url + ', redirect: ' + data.redirect)
+        res.set('Cache-Control', 'public, max-age=' + cacheDur)
         res.redirect(307, data.redirect)
         return
       }
       var headers = data.headers
       var body    = data.body
       if (headers.type) res.type(headers.type)
+      res.set('Cache-Control', 'public, max-age=' + cacheDur)
       if (headers.code && headers.code >= 400) {
         res.status(headers.code).send(body)
         return
