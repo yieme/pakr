@@ -1,6 +1,6 @@
 # Pakr <img src="https://raw.githubusercontent.com/yieme/pakr/master/logo.png" align="right" width="128" border="0" />
 
-Package Server to enable client side use of packages by name and version. Use the [Pakr CDN](http://pakr.yie.me) directly or spin up your own server and leverage the powerful [CloudFlare](https://www.cloudflare.com/) CDN network and serve content from your own domain.
+Package Server to enable client side use of packages by name and version. Use the [Pakr CDN](http://pakr.yie.me) directly or spin up your own server and serve content from your own domain.
 
 ## CDN Statistics
 
