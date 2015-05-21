@@ -1,4 +1,4 @@
-# pakr
+# pakr <img src="https://raw.githubusercontent.com/yieme/pakr/master/logo.png" align="right" height="185" border="0" />
 
 Package Server
 
