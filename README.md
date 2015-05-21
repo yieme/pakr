@@ -7,10 +7,10 @@ Package Server to enable client side use of packages by name and version. Use th
 | CDN | Packages | Package Versions | Source |
 | --- | ---: | ---: | --- |
 | [pakr](./) | 2,346 | 18,259 | internal |
-| [jsdelivr](http://www.jsdelivr.com/) | 1,456 | 3,957 | *1 |
-| [cdnjs](https://cdnjs.com/.com) | 1,218 | 13,145 | *2 |
-| [google](https://developers.google.com/speed/libraries/) | 14 | 301 | *3 |
-| [bootstrap](http://www.bootstrapcdn.com/) | 6 | 86 | *4 |
+| [jsdelivr](http://www.jsdelivr.com/) | 1,456 | 3,957 | [jsdelivr libraries](http://api.jsdelivr.com/v1/jsdelivr/libraries) |
+| [cdnjs](https://cdnjs.com/.com) | 1,218 | 13,145 | [cdnjs libraries](http://api.jsdelivr.com/v1/cdnjs/libraries) |
+| [google](https://developers.google.com/speed/libraries/) | 14 | 301 | [google libraries](http://api.jsdelivr.com/v1/google/libraries)  |
+| [bootstrap](http://www.bootstrapcdn.com/) | 6 | 86 | [bootstrap libraries](http://api.jsdelivr.com/v1/bootstrap/libraries) |
 
 ## Examples
 
@@ -65,12 +65,9 @@ Package Server to enable client side use of packages by name and version. Use th
 }
 ```
 
-## Sources
+## Statistics
 
-1. [jsdelivr libraries](http://api.jsdelivr.com/v1/jsdelivr/libraries) 2015-05-21
-2. [cdnjs libraries](http://api.jsdelivr.com/v1/cdnjs/libraries) 2015-05-21
-3. [google libraries](http://api.jsdelivr.com/v1/google/libraries) 2015-05-21
-4. [bootstrap libraries](http://api.jsdelivr.com/v1/bootstrap/libraries) 2015-05-21
+Last updated: ```2015-05-21```
 
 ## Rights
 
