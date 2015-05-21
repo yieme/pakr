@@ -20,7 +20,6 @@ Package Server to enable client side use of packages by name and version. Use th
 - Latest path of jQuery 2.1 and minor version of Bootstrap 3 together: [jquery@2.1,bootstrap@3](http://pakr.yie.me/jquery@2.1,bootstrap@3)
 - Bootstrap CSS (as JS is the default): [bootstrap@2/css](http://pakr.yie.me/bootstrap@2/css)
 - Bootswatch shorthand: [bootswatch@3/flatly](http://pakr.yie.me/bootswatch@3/flatly)
-```
 
 ## [api](http://pakr.yie.me/api)
 
