@@ -6,10 +6,21 @@ var pkg           = require('./package.json')
 var Logger        = require('ceo-logger')
 var middleServer  = require('middle-server')
 var proxyPackage  = require('proxy-cache-packages')
+var apiDoc        = require('./modules/api-doc')
+var apiLatest     = require('./modules/api-latest')
+var apiPackage    = require('./modules/api-package')
 
 Dias(function(dias) {
   var logVariables  = { server: { id: pkg.name, ver: pkg.version, ua: dias.useragent, node: dias.node, pid: process.pid } }
-  var logger = new Logger(logVariables, true)
+  var logger        = new Logger(logVariables, false)
+  var config        = {
+    dir:        './tmp',
+    logRequest: true
+  }
+  proxyPackage(config)
+  var packages = proxyPackage.init()
+  apiLatest.init({ packages: packages })
+  apiPackage.init({ packages: packages })
 
   function packageMiddle(req, res, next) {
     proxyPackage(req, function proxyResults(err, data) {
@@ -22,13 +33,16 @@ Dias(function(dias) {
         return
       }
       res.send(body)
-      logger.info('type: ' + headers.type + ', body: ' + data.body.substr(0,55) + '..., length: ' + data.body.length)
+
+      if (config.logRequest) {
+        logger.info('type: ' + headers.type + ', length: ' + data.body.length)
+      }
     })
   }
 
   function logError(err, req, res, next) {
     logger.error(err.stack)
-    res.status(500).send(err.message)
+    res.status(500).send({ code: 500, error: err.message })
   }
 
   process.on('uncaughtException', function (err) {
@@ -37,6 +51,16 @@ Dias(function(dias) {
 
   middleServer({
     logger: logger,
-    post:   [ packageMiddle, logError ]
+    pre:    [
+      middleServer.log,
+      middleServer.ignoreFavicon,
+      apiDoc,
+      apiLatest,
+      apiPackage
+    ],
+    post:   [
+      packageMiddle,
+      logError
+    ]
   })
 })
