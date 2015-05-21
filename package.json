@@ -41,7 +41,7 @@
     "ceo-logger": "^1.1.1",
     "dias": "^0.5.4",
     "middle-server": "^0.2.2",
-    "proxy-cache-packages": "^0.2.2",
+    "proxy-cache-packages": "^0.2.3",
     "semver-compare": "^1.0.0",
     "serve-favicon": "^2.2.1"
   },
