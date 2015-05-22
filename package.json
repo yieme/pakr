@@ -1,6 +1,6 @@
 {
   "name": "pakr",
-  "version": "0.1.25",
+  "version": "0.1.26",
   "description": "Package Server",
   "main": "index.js",
   "scripts": {
