@@ -47,9 +47,10 @@ function compressible(type) {
 
 
 Dias(function(dias) {
-  var uagent = JSON.stringify(dias)
-  console.log('DIAS:', uagent)
-  var logVariables  = { server: { id: pkg.name, ver: pkg.version, ua: 'x', node: dias.node, pid: process.pid } }
+  var serverId      = { id: pkg.name, ver: pkg.version, node: dias.node, pid: process.pid }
+  var ua            = process.env.USERAGENT || dias.useragent || (dias.paas) ? 'paas/' + dias.paas + ' host/' + dias.host : undefined
+  if (ua) serverId.ua = ua
+  var logVariables  = { server: serverId }
   var logLevel      = (process.env.DEBUG) ? 'debug' : undefined
   logLevel          = logLevel || process.env.LOG_LEVEL
   var logger        = new Logger(logVariables, false, logLevel)
