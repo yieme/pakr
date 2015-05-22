@@ -9,6 +9,8 @@ var proxyPackage  = require('proxy-cache-packages')
 var apiDoc        = require('./modules/api-doc')
 var apiLatest     = require('./modules/api-latest')
 var apiPackage    = require('./modules/api-package')
+var compression   = require('compression')()
+var mimedb        = require('mime-db')
 var favicon       = require('serve-favicon')(__dirname + '/favicon.ico')
 var pakrStatic    = process.env.STATIC_URL || 'http://pakr-static.yie.me'
 var cacheDur      = (process.env.NODE_ENV == 'production') ? 60 * 60 * 1000 : 15 * 1000 // 1 hour in production, 15 seconds dev
@@ -24,6 +26,23 @@ var packageList = [
   'cdnall_data.json',
   pakrStatic + '/pakr.json',
 ]
+
+
+function compressible(type) {
+  if (!type || typeof type !== "string") return false
+
+  // Strip charset
+  var i = type.indexOf(';')
+  if (~i) type = type.slice(0, i)
+
+  // handle types that have capitals or excess space
+  type = type.trim().toLowerCase()
+
+  // attempt to look up from database; fallback to regex if not found
+  var mime = mimedb[type]
+  return mime ? mime.compressible : /^text\/|\+json$|\+javascript$|\+ttf$|\+woff$|\+text$|\+xml$/.test(type)
+}
+
 
 
 Dias(function(dias) {
@@ -90,6 +109,7 @@ Dias(function(dias) {
   middleServer({
     logger: logger,
     pre:    [
+      compression,
       middleServer.log,
       favicon,
       apiDoc,
