@@ -10,7 +10,8 @@ var apiDoc        = require('./modules/api-doc')
 var apiLatest     = require('./modules/api-latest')
 var apiPackage    = require('./modules/api-package')
 var compression   = require('compression')()
-var mimedb        = require('mime-db')
+var LRU           = require('lru-cache')
+var cache         = LRU()
 var favicon       = require('serve-favicon')(__dirname + '/favicon.ico')
 var pakrStatic    = process.env.STATIC_URL || 'http://pakr-static.yie.me'
 var cacheDur      = (process.env.NODE_ENV == 'production') ? 60 * 60 * 1000 : 15 * 1000 // 1 hour in production, 15 seconds dev
@@ -46,7 +47,9 @@ function compressible(type) {
 
 
 Dias(function(dias) {
-  var logVariables  = { server: { id: pkg.name, ver: pkg.version, ua: dias.useragent, node: dias.node, pid: process.pid } }
+  var uagent = JSON.stringify(dias)
+  console.log('DIAS:', uagent)
+  var logVariables  = { server: { id: pkg.name, ver: pkg.version, ua: 'x', node: dias.node, pid: process.pid } }
   var logLevel      = (process.env.DEBUG) ? 'debug' : undefined
   logLevel          = logLevel || process.env.LOG_LEVEL
   var logger        = new Logger(logVariables, false, logLevel)
@@ -62,31 +65,44 @@ Dias(function(dias) {
   apiLatest.init({ packages: packages })
   apiPackage.init({ packages: packages })
 
+
+  function respondWithData(req, res, data) {
+    if (data.redirect) {
+      logger.info(req.url + ', redirect: ' + data.redirect)
+      res.set('Cache-Control', 'public, max-age=' + cacheDur)
+      res.redirect(307, data.redirect)
+      return
+    }
+    var headers = data.headers
+    var stream  = data.stream
+    var body    = data.body
+    if (headers.type) res.set('Content-Type', headers.type)
+    res.set('Cache-Control', 'public, max-age=' + cacheDur)
+    if (stream) {
+      stream.pipe(res)
+      logger.debug(headers.code + ' ' + req.url  + ', type: ' + headers.type + ', stream')
+      return
+    } else if (headers.code && headers.code >= 400) {
+      res.status(headers.code).send(body)
+      logger.info(headers.code + ' ' + req.url  + ', type: ' + headers.type + ', length: ' + data.body.length)
+    } else {
+      res.send(body)
+      logger.debug(headers.code + ' ' + req.url  + ', type: ' + headers.type + ', length: ' + data.body.length)
+    }
+  }
+
   function packageMiddle(req, res, next) {
+    var cachedData = cache.get(req.url)
+    if (cachedData) {
+      logger.debug('LRU Cached: ' + req.url)
+      return respondWithData(req, res, JSON.parse(cachedData))
+    }
     proxyPackage(req, function proxyResults(err, data) {
       if (err) return next(err)
-      if (data.redirect) {
-        logger.info(req.url + ', redirect: ' + data.redirect)
-        res.set('Cache-Control', 'public, max-age=' + cacheDur)
-        res.redirect(307, data.redirect)
-        return
-      }
-      var headers = data.headers
-      var stream  = data.stream
-      var body    = data.body
-      if (headers.type) res.set('Content-Type', headers.type)
-      res.set('Cache-Control', 'public, max-age=' + cacheDur)
-      if (stream) {
-        stream.pipe(res)
-        return
-      } else if (headers.code && headers.code >= 400) {
-        res.status(headers.code).send(body)
-        return
-      } else {
-        res.send(body)
-      }
-      if (config.logRequest) {
-        logger.info(headers.code + ' ' + req.url  + ', type: ' + headers.type + ', length: ' + data.body.length)
+      respondWithData(req, res, data)
+      if (!data.stream) {
+        logger.debug('LRU Cache: ' + req.url)
+        cache.set(req.url, JSON.stringify(data))
       }
     })
   }
