@@ -38,12 +38,12 @@
     "url": "https://github.com/yieme/pakr/issues"
   },
   "dependencies": {
-    "ceo-logger": "^1.1.1",
+    "ceo-logger": "^1.2.1",
     "compression": "^1.4.4",
     "dias": "^0.5.4",
-    "middle-server": "^0.2.3",
+    "middle-server": "^0.3.2",
     "mime-db": "^1.10.0",
-    "proxy-cache-packages": "^0.2.4",
+    "proxy-cache-packages": "^0.2.7",
     "semver-compare": "^1.0.0",
     "serve-favicon": "^2.2.1"
   },

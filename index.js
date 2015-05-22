@@ -47,10 +47,12 @@ function compressible(type) {
 
 Dias(function(dias) {
   var logVariables  = { server: { id: pkg.name, ver: pkg.version, ua: dias.useragent, node: dias.node, pid: process.pid } }
-  var logger        = new Logger(logVariables, false)
+  var logLevel      = (process.env.DEBUG) ? 'debug' : undefined
+  logLevel          = logLevel || process.env.LOG_LEVEL
+  var logger        = new Logger(logVariables, false, logLevel)
   var config        = {
     dir:        './tmp',
-    logRequest: true, // log request transformations in proxy-cache-* layers // TODO: change to debug
+    logger:     logger,
     domain:     domain,
     skipInit:   true, // skip initial initialization in proxyPackage() below, as init will be done manually. avoids double loading
     packageDataUrl: packageList
@@ -70,17 +72,21 @@ Dias(function(dias) {
         return
       }
       var headers = data.headers
+      var stream  = data.stream
       var body    = data.body
-      if (headers.type) res.type(headers.type)
+      if (headers.type) res.set('Content-Type', headers.type)
       res.set('Cache-Control', 'public, max-age=' + cacheDur)
-      if (headers.code && headers.code >= 400) {
+      if (stream) {
+        stream.pipe(res)
+        return
+      } else if (headers.code && headers.code >= 400) {
         res.status(headers.code).send(body)
         return
+      } else {
+        res.send(body)
       }
-      res.send(body)
-
       if (config.logRequest) {
-        logger.info(req.url + ', type: ' + headers.type + ', length: ' + data.body.length)
+        logger.info(headers.code + ' ' + req.url  + ', type: ' + headers.type + ', length: ' + data.body.length)
       }
     })
   }
@@ -106,10 +112,10 @@ Dias(function(dias) {
     logger.error(err.stack)
   })
 
-  middleServer({
+  var app = middleServer({
     logger: logger,
     pre:    [
-      compression,
+//      compression,
       middleServer.log,
       favicon,
       apiDoc,
@@ -121,4 +127,5 @@ Dias(function(dias) {
       logError
     ]
   })
+  app.locals._log = logger
 })
