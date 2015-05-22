@@ -43,7 +43,7 @@
     "dias": "^0.5.4",
     "lru-cache": "^2.6.4",
     "middle-server": "^0.3.2",
-    "proxy-cache-packages": "^0.2.7",
+    "proxy-cache-packages": "^0.2.10",
     "semver-compare": "^1.0.0",
     "serve-favicon": "^2.2.1"
   },
