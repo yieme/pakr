@@ -56,7 +56,7 @@ Package Server to enable client side use of packages by name and version. Use th
 {
 	'website':                      '/',
 	'api_docs':                     '/api',
-	'package_details':              '/api/{package}',
+	'package_details':              '/api/package/{package}',
 	'latest_package_versions':      '/api/latest/{search}',
 	'latest_package':               '/{package}',
 	'versioned_package':            '/{package}@{version}',

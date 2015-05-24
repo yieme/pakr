@@ -21,6 +21,7 @@ function requestLog(req, res, next) {
 
 
 function requestError(err, req, res, next) {
+  console.log('requestError:', err)
   res.status(500).send('Internal Error')
   if (expressMiddlewareCeoLog.postlog) {
     log.error('500 ' + req.method + ' ' + req.path)

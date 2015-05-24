@@ -8,7 +8,7 @@ function apiDoc(req, res, next) {
   var docs = {
     website:                        '/',
     api_docs:                       '/api',
-    package_details:                '/api/{package}',
+    package_details:                '/api/package/{package}',
     latest_package_versions:        '/api/latest/{search}',
 //    cdn_stats:                      '/api/stats/comparison',
     latest_package:                 '/{package}',

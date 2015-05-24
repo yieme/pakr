@@ -11,22 +11,23 @@ var apiLatest     = require('./modules/api-latest')
 var apiPackage    = require('./modules/api-package')
 var compression   = require('compression')()
 var LRU           = require('lru-cache')
+var prefix        = process.env.PREFIX || '/'
+var prefixLength  = prefix.length
 var cache         = LRU()
 var favicon       = require('serve-favicon')(__dirname + '/favicon.ico')
 var pakrStatic    = process.env.STATIC_URL || 'http://pakr-static.yie.me'
 var cacheDur      = (process.env.NODE_ENV == 'production') ? 60 * 60 * 1000 : 15 * 1000 // 1 hour in production, 15 seconds dev
 var domain        = {
-  pakr:       pakrStatic + '/$package/$version/$file', // proxy-cache-multi-domain override to include local files
-  cdnjs:      'https://cdnjs.cloudflare.com/ajax/libs/$package/$version/$file',
   jsdelivr:   'https://cdn.jsdelivr.net/$package/$version/$file',
+  cdnjs:      'https://cdnjs.cloudflare.com/ajax/libs/$package/$version/$file',
   google:     'https://ajax.googleapis.com/ajax/libs/$package/$version/$file',
   bootstrap:  'https://maxcdn.bootstrapcdn.com/$package/$version/$file',
   bootswatch: 'https://maxcdn.bootstrapcdn.com/bootswatch/$version/$package/$file',
+  pakr:       pakrStatic + '/$package/$version/$file', // proxy-cache-multi-domain override to include local files
 }
-var packageList = [
-  'cdnall_data.json',
-  pakrStatic + '/pakr.json',
-]
+var packageList = [ 'cdnall_data.json' ]
+//  packageDataUrl:   'https://pub.firebaseio.com/cdn',
+if (pakrStatic) packageList.push(pakrStatic + '/pakr.json')
 
 
 function compressible(type) {
@@ -93,6 +94,8 @@ Dias(function(dias) {
   }
 
   function packageMiddle(req, res, next) {
+    if (req.url.indexOf(prefix) != 0) return next() // prefix must match
+    req.url = req.url.replace(prefix, '')  // remove prefix
     var cachedData = cache.get(req.url)
     if (cachedData) {
       logger.debug('LRU Cached: ' + req.url)
@@ -109,9 +112,10 @@ Dias(function(dias) {
   }
 
   function logError(err, req, res, next) {
+    logger.debug('logError:' + err)
     if ('string' == typeof err) {
       if (err.indexOf('Not Found') >= 0) {
-        logger.info(err)
+        logger.info(err + ' logError')
         res.status(404).send({ code: 404, error: err.replace(': /', ': ') })
         return
       } else {
@@ -122,9 +126,11 @@ Dias(function(dias) {
       if (err.stack) logger.error(err.stack)
     }
     res.status(500).send({ code: 500, error: err.message || err })
+    next(err)
   }
 
   process.on('uncaughtException', function (err) {
+    logger.error('uncaughtException')
     logger.error(err)
     logger.error(err.stack)
   })
@@ -132,7 +138,7 @@ Dias(function(dias) {
   var app = middleServer({
     logger: logger,
     pre:    [
-//      compression,
+      compression,
       middleServer.log,
       favicon,
       apiDoc,
@@ -140,9 +146,9 @@ Dias(function(dias) {
       apiPackage
     ],
     post:   [
-      packageMiddle,
-      logError
+      packageMiddle
     ]
   })
+  app.use(logError)
   app.locals._log = logger
 })

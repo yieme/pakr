@@ -1,9 +1,10 @@
 'use strict';
 
-var cmp     = require('semver-compare')
-var ignore  = ['latest', 'cdn', 'mains', 'files', 'description', 'homepage']
-var API_URI = '/api/package/'
-var options = {
+var cmp      = require('semver-compare')
+var ignore   = ['latest', 'cdn', 'mains', 'files', 'description', 'homepage']
+var API_URI  = '/api/package/'
+var cacheDur = (process.env.NODE_ENV == 'production') ? 60 * 60 * 1000 : 15 * 1000 // 1 hour in production, 15 seconds dev
+var options  = {
   packages: {},
   pretty:   true
 }
@@ -27,6 +28,7 @@ function apiPackage(req, res, next) {
     }
   }
 	var result = { name: name, latest: pack.latest, description: pack.description, homepage: pack.homepage, versions: versions.sort(cmp) }
+  res.set('Cache-Control', 'public, max-age=' + cacheDur)
   res.set('Content-Type', 'application/json') // JSONP: application/javascript
 	var json = (options.pretty) ? JSON.stringify(result, null, 2) : JSON.stringify(result)
   res.status(200).send(json)

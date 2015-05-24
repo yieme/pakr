@@ -1,7 +1,8 @@
 'use strict';
 
-var API_URI   = '/api/latest/'
-var options   = {
+var API_URI  = '/api/latest/'
+var cacheDur = (process.env.NODE_ENV == 'production') ? 60 * 60 * 1000 : 15 * 1000 // 1 hour in production, 15 seconds dev
+var options  = {
   packages: {},
   pretty: true
 }
@@ -52,6 +53,7 @@ function apiLatest(req, res, next) {
       result.push(data)
     }
   }
+  res.set('Cache-Control', 'public, max-age=' + cacheDur)
   res.set('Content-Type', 'application/json') // JSONP: application/javascript
   var json = (options.pretty) ? JSON.stringify(result, null, 2) : JSON.stringify(result)
   res.locals.statusCode = 200

@@ -21,8 +21,9 @@ function cdnallHomepage(req, res, next) {
     res.locals.statusCode = 200
     res.status(200).send(page)
   } else if (req.path == '/favicon.ico') {
+    console.log('cdnallHomepage')
     res.locals.statusCode = 404
-    res.status(404).send('Not Found')
+    res.status(404).send('Not Found (hp)')
   } else {
     next()
   }
