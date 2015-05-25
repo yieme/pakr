@@ -4,7 +4,7 @@ Package Server to enable client side use of packages by name and version. Use th
 
 ## CDN Statistics
 
-| CDN | Packages | Package Versions | Source |
+| Source | Packages | Package Versions | Reference |
 | --- | ---: | ---: | --- |
 | [pakr](./) | 2,346 | 18,259 | internal |
 | [jsdelivr](http://www.jsdelivr.com/) | 1,456 | 3,957 | [jsdelivr libraries](http://api.jsdelivr.com/v1/jsdelivr/libraries) |
@@ -54,7 +54,7 @@ Package Server to enable client side use of packages by name and version. Use th
 
 ```js
 {
-	'website':                      '/',
+	'homepage':                     '/',
 	'api_docs':                     '/api',
 	'package_details':              '/api/package/{package}',
 	'latest_package_versions':      '/api/latest/{search}',

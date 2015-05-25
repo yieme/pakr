@@ -1,3 +1,9 @@
+/* Package Server to enable client side use of packages by name and version
+ *
+ * @copyright (C) 2015 by Yieme
+ * @license   MIT
+*/
+
 'use strict';
 
 var os            = require('os')
@@ -30,26 +36,10 @@ var packageList = [ 'cdnall_data.json' ]
 if (pakrStatic) packageList.push(pakrStatic + '/pakr.json')
 
 
-function compressible(type) {
-  if (!type || typeof type !== "string") return false
-
-  // Strip charset
-  var i = type.indexOf(';')
-  if (~i) type = type.slice(0, i)
-
-  // handle types that have capitals or excess space
-  type = type.trim().toLowerCase()
-
-  // attempt to look up from database; fallback to regex if not found
-  var mime = mimedb[type]
-  return mime ? mime.compressible : /^text\/|\+json$|\+javascript$|\+ttf$|\+woff$|\+text$|\+xml$/.test(type)
-}
-
-
-
 Dias(function(dias) {
   var serverId      = { id: pkg.name, ver: pkg.version, node: dias.node, pid: process.pid }
-  var ua            = process.env.USERAGENT || dias.useragent || (dias.paas) ? 'paas/' + dias.paas + ' host/' + dias.host : undefined
+  var paas          = (dias.paas) ? 'paas/' + dias.paas + ' host/' + dias.host : undefined
+  var ua            = process.env.USERAGENT || dias.useragent || paas
   if (ua) serverId.ua = ua
   var logVariables  = { server: serverId }
   var logLevel      = (process.env.DEBUG) ? 'debug' : undefined
@@ -86,7 +76,7 @@ Dias(function(dias) {
       return
     } else if (headers.code && headers.code >= 400) {
       res.status(headers.code).send(body)
-      logger.info(headers.code + ' ' + req.url  + ', type: ' + headers.type + ', length: ' + data.body.length)
+      logger.info(headers.code  + ' ' + req.url  + ', type: ' + headers.type + ', length: ' + data.body.length)
     } else {
       res.send(body)
       logger.debug(headers.code + ' ' + req.url  + ', type: ' + headers.type + ', length: ' + data.body.length)

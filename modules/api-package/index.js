@@ -27,7 +27,8 @@ function apiPackage(req, res, next) {
 			versions.push(i)
     }
   }
-	var result = { name: name, latest: pack.latest, description: pack.description, homepage: pack.homepage, versions: versions.sort(cmp) }
+  var result = pack
+//	var result = { name: name, latest: pack.latest, description: pack.description, homepage: pack.homepage, versions: versions.sort(cmp) }
   res.set('Cache-Control', 'public, max-age=' + cacheDur)
   res.set('Content-Type', 'application/json') // JSONP: application/javascript
 	var json = (options.pretty) ? JSON.stringify(result, null, 2) : JSON.stringify(result)
