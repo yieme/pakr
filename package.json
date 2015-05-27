@@ -42,7 +42,7 @@
     "compression": "^1.4.4",
     "dias": "^0.5.4",
     "lru-cache": "^2.6.4",
-    "middle-server": "^0.3.2",
+    "middle-server": "^0.3.5",
     "proxy-cache-packages": "^0.2.13",
     "semver-compare": "^1.0.0",
     "serve-favicon": "^2.2.1"
