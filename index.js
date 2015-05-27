@@ -128,7 +128,7 @@ Dias(function(dias) {
   var app = middleServer({
     logger: logger,
     pre:    [
-      compression,
+//      compression,
       middleServer.log,
       favicon,
       apiDoc,
